@@ -1,0 +1,4 @@
+[
+    {"model": "orders.order", "pk": 1, "fields": {"customer": 1, "robot_serial": "R7-D7"}},
+    {"model": "orders.order", "pk": 2, "fields": {"customer": 3, "robot_serial": "R7-D7"}}
+]

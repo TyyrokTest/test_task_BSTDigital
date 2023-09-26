@@ -1,0 +1,21 @@
+<div>
+    <h1>Форма для заказа робота</h1>
+    <p>Вы можете оставить заказ на робота в форме ниже. Как только робот будет в наличии, мы отправим вам письмо.</p>
+    <form action="{% url 'add_order' %}" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="fieldWrapper" style="padding-bottom:5">
+                {{ field.errors }}
+            </div>
+            <div class="fieldWrapper" style="padding-top:5; padding-bottom:5">
+                {{ field.label_tag }} 
+            </div>
+            <div class="fieldWrapper" style="padding-top:5; padding-bottom:5">
+                {{ field }}
+                
+            </div>
+        {% endfor %}
+        <input type="submit" value="Заказать">
+    </form>
+    {{ success_message }}
+</div>
