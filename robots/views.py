@@ -1,8 +1,38 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views import View
+from django.views.generic import TemplateView
+from django.utils import timezone
+from django.db.models import Count
 from robots.forms import RobotForm
+from robots.models import Robot
+from robots.utils import createExcel
 import json
+
+class ManagerReportView(TemplateView):
+    template_name = 'index.html'
+    
+class ManagerReportCreateView(View):
+    
+    def get(self, request, *args, **kwargs):
+
+        delta = timezone.timedelta(days=7)
+        start_date = timezone.now() - delta
+        end_date = timezone.now()
+        robots = (
+            Robot.objects.filter(created__range=(start_date, end_date))
+                         .values('model', 'version')
+                         .annotate(num=Count("version"))
+                         .order_by('model', 'version')
+        )
+        if len(robots) == 0:
+            return HttpResponse("No data for report") 
+        stream = createExcel(qs=robots)
+        
+        return HttpResponse(content=stream, headers={
+            "Content-Type": "application/vnd.ms-excel",
+            "Content-Disposition": 'attachment; filename="week_report.xlsx"',
+        })
 
 class RobotsAddView(View):
     def post(self, request):

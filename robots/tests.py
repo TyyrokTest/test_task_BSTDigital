@@ -77,3 +77,30 @@ class SimpleTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(len(json.loads(response.content)['success']), 1)
         self.assertEqual(len(json.loads(response.content)['failure']), 1)
+
+class Task2Test(TestCase):
+    def setUp(self):
+        self.client = Client()
+        
+    def test1_check_report_view_page(self):
+        response = self.client.get('/robots/report/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="redirecting-link"')
+    
+    def test2_check_report_download_view_page_with_empy_db(self):
+        response = self.client.get('/robots/report/download/')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'No data for report')
+        
+class Task2TestWithFixtures(TestCase):
+    fixtures = ['robots.json']
+    def setUp(self):
+        self.client = Client()
+    
+    def test3_check_report_create_view_page(self):
+        response = self.client.get('/robots/report/download/')
+        self.assertEqual(response.status_code, 200)
+        self.assertEquals(
+            response.get('Content-Disposition'),
+            'attachment; filename="week_report.xlsx"'
+        )
