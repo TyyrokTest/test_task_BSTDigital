@@ -1,0 +1,5 @@
+[
+    {"model": "customers.customer", "pk": 1, "fields": {"email": "customer@customs.com"}},
+    {"model": "customers.customer", "pk": 2, "fields": {"email": "customer2@customs.com"}},
+    {"model": "customers.customer", "pk": 3, "fields": {"email": "customer3@customs.com"}}
+]
